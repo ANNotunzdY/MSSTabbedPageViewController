@@ -436,6 +436,12 @@ willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewContro
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
     _previousCurrentPage = self.currentPage;
+    if (finished) {
+        self.userInteractionEnabled = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.userInteractionEnabled = YES;
+        });
+    }
 }
 
 #pragma mark - MSSPageViewController data source
