@@ -45,6 +45,7 @@ NSInteger const MSSPageViewControllerPageNumberInvalid = -1;
 
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 @property (nonatomic, assign) CGFloat previousPagePosition;
+@property (nonatomic, assign) CGFloat previousCurrentPage;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL scrollUpdatesEnabled;
@@ -296,15 +297,15 @@ NSInteger const MSSPageViewControllerPageNumberInvalid = -1;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     _animatingPageUpdate = NO;
+    _previousCurrentPage = self.currentPage;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     CGFloat pageWidth = scrollView.frame.size.width;
     CGFloat scrollOffset = (scrollView.contentOffset.x - pageWidth);
-    
     CGFloat currentXOffset = (self.currentPage * pageWidth) + scrollOffset;
-    CGFloat currentPagePosition = currentXOffset / pageWidth;
+    CGFloat currentPagePosition = MAX(_previousCurrentPage - 1, MIN(currentXOffset / pageWidth, _previousCurrentPage + 1));
     MSSPageViewControllerScrollDirection direction =
     currentPagePosition > _previousPagePosition ?
     MSSPageViewControllerScrollDirectionForward : MSSPageViewControllerScrollDirectionBackward;
