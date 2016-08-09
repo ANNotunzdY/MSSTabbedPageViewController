@@ -196,6 +196,8 @@ static MSSTabBarCollectionViewCell *_sizingCell;
         ([self.selectedIndexPath isEqual:indexPath] && self.tabOffset == MSSTabBarViewTabOffsetInvalid)) {
         _hasRespectedDefaultTabIndex = YES;
         [self setTabCellActive:cell indexPath:indexPath];
+    } else {
+        [self setTabCellInactive:cell];
     }
     
     return cell;
@@ -492,6 +494,11 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
             [self updateIndicatorViewFrameWithXOrigin:cell.frame.origin.x
                                              andWidth:cell.frame.size.width
                                     accountForPadding:YES];
+        } completion:^(BOOL finished) {
+            if (cell != self.selectedCell) {
+                NSIndexPath *indexPath = [self.collectionView indexPathForCell:self.selectedCell];
+                [self setTabCellsInactiveExceptTabIndex:indexPath.row];
+            }
         }];
     } else {
         [self updateIndicatorViewFrameWithXOrigin:cell.frame.origin.x
