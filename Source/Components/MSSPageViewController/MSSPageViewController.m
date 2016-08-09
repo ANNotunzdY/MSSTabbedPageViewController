@@ -434,6 +434,10 @@ willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewContro
     }
 }
 
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
+    _previousCurrentPage = self.currentPage;
+}
+
 #pragma mark - MSSPageViewController data source
 
 - (NSArray *)viewControllersForPageViewController:(MSSPageViewController *)pageViewController {
